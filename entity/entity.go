@@ -62,10 +62,12 @@ func (e Entity) Classname() string {
 
 // Filename returns the file name of the entity
 func (e Entity) Filename() string {
-	return querystringFilename(e.QueryString())
+	return QuerystringFilename(e.QueryString())
 }
 
-func querystringFilename(qs string) string {
+// QuerystringFilename returns a string corresponding to the filename,
+// suitable for querying
+func QuerystringFilename(qs string) string {
 	if fileNameRegexp == nil {
 		fileNameRegexp = regexp.MustCompile(`\_([^\.]+)\.java/\[CN\]/`)
 	}
