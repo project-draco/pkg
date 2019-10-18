@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strings"
 
-	"project-draco.io/naming"
+	"github.com/project-draco/naming"
 )
 
 // Entity represents a source-code entity,
