@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-// DependencyScanner reads co-change MDG files
+// DependencyScanner reads MDG files
 type DependencyScanner struct {
 	scanner *bufio.Scanner
 }
