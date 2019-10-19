@@ -9,17 +9,40 @@ import (
 
 // DependencyScanner reads MDG files
 type DependencyScanner struct {
-	scanner *bufio.Scanner
+	scanner             *bufio.Scanner
+	minimumSupportCount int
+	minimumConfidence   float64
 }
 
 // NewDependencyScanner returns a new DependencyScanner to read from r
 func NewDependencyScanner(r io.Reader) *DependencyScanner {
-	return &DependencyScanner{bufio.NewScanner(r)}
+	return &DependencyScanner{bufio.NewScanner(r), 0, 0}
+}
+
+// NewDependencyScannerWithFilter returns a new DependencyScanner
+// to read from r which skips dependencies that do not fulfill filter conditions
+func NewDependencyScannerWithFilter(
+	r io.Reader,
+	minimumSupportCount int,
+	minimumConfidence float64,
+) *DependencyScanner {
+	return &DependencyScanner{
+		bufio.NewScanner(r),
+		minimumSupportCount,
+		minimumConfidence,
+	}
 }
 
 // Scan advances the scanner to the next dependency
 func (ds *DependencyScanner) Scan() bool {
 	for ds.scanner.Scan() {
+		if ds.minimumSupportCount > 0 || ds.minimumConfidence > 0 {
+			d := ds.Dependency()
+			if d.SupportCount < ds.minimumSupportCount ||
+				d.Confidence < ds.minimumConfidence {
+				continue
+			}
+		}
 		if strings.TrimSpace(ds.scanner.Text()) != "" {
 			return true
 		}
