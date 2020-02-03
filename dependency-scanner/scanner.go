@@ -67,10 +67,13 @@ func (ds *DependencyScanner) Dependency() struct {
 	if len(arr) < 2 {
 		arr = strings.Split(ds.scanner.Text(), " ")
 	}
-	var i int
-	for i = len(arr) - 1; i > -1; i-- {
+	i := len(arr) - 1
+	for ; i > -1; i-- {
 		_, err := strconv.ParseFloat(arr[i], 32)
 		if err != nil {
+			if i == len(arr)-1 {
+				continue
+			}
 			break
 		}
 	}
