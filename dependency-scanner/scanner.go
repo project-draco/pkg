@@ -62,16 +62,19 @@ func (ds *DependencyScanner) Dependency() struct {
 	SupportCount int
 	Confidence   float64
 	CommitsCount int
+	Hashes       []string
 } {
 	arr := strings.Split(strings.TrimSpace(ds.scanner.Text()), "\t")
 	if len(arr) < 2 {
 		arr = strings.Split(ds.scanner.Text(), " ")
 	}
+	var hashes []string
 	i := len(arr) - 1
 	for ; i > -1; i-- {
 		_, err := strconv.ParseFloat(arr[i], 32)
 		if err != nil {
 			if i == len(arr)-1 {
+				hashes = strings.Split(arr[i], ",")
 				continue
 			}
 			break
@@ -100,10 +103,12 @@ func (ds *DependencyScanner) Dependency() struct {
 		SupportCount int
 		Confidence   float64
 		CommitsCount int
+		Hashes       []string
 	}{
 		entities[:len(entities)-1], entities[len(entities)-1],
 		supportCount,
 		confidence,
 		commitsCount,
+		hashes,
 	}
 }
