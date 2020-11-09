@@ -64,26 +64,26 @@ func (ds *DependencyScanner) Dependency() struct {
 	CommitsCount int
 	Hashes       []string
 } {
-	arr := strings.Split(strings.TrimSpace(ds.scanner.Text()), "\t")
-	if len(arr) < 2 {
-		arr = strings.Split(ds.scanner.Text(), " ")
+	fields := strings.Split(strings.TrimSpace(ds.scanner.Text()), "\t")
+	if len(fields) < 2 {
+		fields = strings.Split(ds.scanner.Text(), " ")
 	}
 	var hashes []string
-	i := len(arr) - 1
+	i := len(fields) - 1
 	for ; i > -1; i-- {
-		_, err := strconv.ParseFloat(arr[i], 32)
+		_, err := strconv.ParseFloat(fields[i], 32)
 		if err != nil {
-			if i == len(arr)-1 {
-				hashes = strings.Split(arr[i], ",")
+			if i == len(fields)-1 && i > 1 {
+				hashes = strings.Split(fields[i], ",")
 				continue
 			}
 			break
 		}
 	}
-	entities := arr[0 : i+1]
+	entities := fields[0 : i+1]
 	var numbers []string
-	if i < len(arr)-1 {
-		numbers = arr[i+1:]
+	if i < len(fields)-1 {
+		numbers = fields[i+1:]
 	}
 	supportCount := 0
 	if len(numbers) > 0 {
